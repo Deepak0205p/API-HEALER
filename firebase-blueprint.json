@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "auditLog": {
+      "title": "Audit Log",
+      "description": "Chronological record of system actions, configuration changes, and job retries",
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "Name of the action executed, e.g. RETRY_JOB, UPDATE_CONFIG, TOGGLE_CIRCUIT_BREAKER, TRIGGER_CANARY"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["SYSTEM_ACTION", "CONFIG_CHANGE", "JOB_RETRY"],
+          "description": "Category classification of the audit log"
+        },
+        "details": {
+          "type": "string",
+          "description": "Detailed human-readable description of what changed or what was executed"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target identifier such as job ID, service endpoint, or setting key"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAILED", "PENDING"],
+          "description": "Execution status of the event"
+        },
+        "performedByUid": {
+          "type": "string",
+          "description": "Firebase Auth UID or system identifier"
+        },
+        "performedByEmail": {
+          "type": "string",
+          "description": "Email address or system username of the actor"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Key-value attributes or payload snapshot"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO timestamp of when the action occurred"
+        }
+      },
+      "required": ["action", "category", "details", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/audit_logs/{logId}": {
+      "entity": "auditLog",
+      "description": "Collection of system and user audit trail records"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    function isValidAuditLog(data) {
+      return data.action is string && data.action.size() > 0 && data.action.size() <= 120
+        && data.category in ['SYSTEM_ACTION', 'CONFIG_CHANGE', 'JOB_RETRY']
+        && data.details is string && data.details.size() <= 2000
+        && data.status in ['SUCCESS', 'FAILED', 'PENDING']
+        && data.createdAt is string;
+    }
+
+    match /audit_logs/{logId} {
+      // Audit logs are readable by dashboard viewers
+      allow read: if true;
+
+      // Allow appending audit log events with strict validation
+      allow create: if isValidId(logId) && isValidAuditLog(request.resource.data);
+
+      // Audit logs are strictly immutable: no updates or deletes permitted
+      allow update, delete: if false;
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

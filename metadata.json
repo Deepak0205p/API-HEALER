@@ -1,0 +1,8 @@
+{
+  "name": "API-HEALER",
+  "description": "Dual-loop self-healing runtime firewall: sub-second JSON payload adaptation, 3-gate refusal engine, 4.5σ unit-bug protection, and canary-proven GitHub PRs for zero-downtime production.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
