@@ -310,7 +310,7 @@ export function ConnectModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[88vh] overflow-y-auto border-border bg-card text-foreground sm:max-w-xl">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border-border bg-card text-foreground sm:max-w-2xl p-6 shadow-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
             <Zap className="h-4 w-4 text-primary" />
@@ -357,7 +357,7 @@ export function ConnectModal({
               <p className="mb-1.5 text-xs font-medium text-foreground">
                 1-Click App Templates (Instant Fill)
               </p>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                 {APP_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
@@ -375,7 +375,7 @@ export function ConnectModal({
               </div>
             </div>
 
-            <div className="grid gap-2.5 sm:grid-cols-[1fr_auto]">
+            <div className="grid gap-3 sm:grid-cols-[1fr_120px]">
               <div className="space-y-1">
                 <p className="text-xs font-medium text-foreground">
                   Live Endpoint URL, Route Path, or cURL Command
@@ -495,7 +495,7 @@ export function ConnectModal({
                         {copiedKey === 'cli' ? 'Copied' : 'Copy'}
                       </Button>
                     </div>
-                    <pre className="overflow-x-auto font-mono text-[11px] text-foreground/90">
+                    <pre className="overflow-x-auto break-all whitespace-pre-wrap rounded bg-muted/50 p-2 font-mono text-[11px] text-foreground/90">
                       {`curl -fsSL "${origin}/api/setup/script?contractId=${setupResult.contract.id}" | sh`}
                     </pre>
                   </div>
