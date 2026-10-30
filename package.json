@@ -85,10 +85,12 @@
     "vaul": "^1.1.2",
     "z-ai-web-dev-sdk": "^0.0.18",
     "zod": "^4.0.2",
-    "zustand": "^5.0.6"
+    "zustand": "^5.0.6",
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.3.5"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -96,8 +98,6 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "^16.1.1",
-    "tailwindcss": "^4",
-    "tw-animate-css": "^1.3.5",
     "typescript": "^5"
   }
 }
