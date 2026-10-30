@@ -3,6 +3,19 @@ import { db } from '@/lib/db';
 import { recordDriftEventInBackground } from '@/lib/healer/audit';
 import { enqueueJob } from '@/lib/jobs/queue';
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: CORS_HEADERS,
+  });
+}
+
 /**
  * Live Proxy Bridge Endpoint for Demo Interception
  * Clients/Demo Pages call this endpoint to send live traffic through API-Healer
@@ -28,7 +41,7 @@ export async function POST(req: NextRequest) {
       contract = allContracts[0] || null;
     }
 
-    const endpointUrl = targetEndpoint || 'http://localhost:4000/api/v1/payments/charge';
+    const endpointUrl = targetEndpoint || 'https://payment-apihealer.onrender.com/api/v1/payments/charge';
 
     // 2. Dispatch call to upstream microservice
     let upstreamRes: Response;
@@ -48,7 +61,10 @@ export async function POST(req: NextRequest) {
         parsedJson = null;
       }
     } catch (err: any) {
-      return NextResponse.json({ error: `Upstream connection failed: ${err.message}` }, { status: 502 });
+      return NextResponse.json(
+        { error: `Upstream connection failed: ${err.message}` },
+        { status: 502, headers: CORS_HEADERS },
+      );
     }
 
     const tEnd = performance.now();
@@ -58,7 +74,11 @@ export async function POST(req: NextRequest) {
     let driftType = 'PASSTHROUGH';
     let status = 'PASSTHROUGH';
     let healedPayload: Record<string, unknown> | null = null;
-    const isDrift = parsedJson && (parsedJson.order_reference_no || parsedJson.settled_total || (typeof parsedJson.amount === 'number' && parsedJson.amount > 50000));
+    const isDrift =
+      parsedJson &&
+      (parsedJson.order_reference_no ||
+        parsedJson.settled_total ||
+        (typeof parsedJson.amount === 'number' && parsedJson.amount > 50000));
 
     if (isDrift && parsedJson) {
       // 4.5σ Outlier Check
@@ -140,9 +160,12 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 5. Return healed payload directly to the caller so checkout succeeds!
-    return NextResponse.json(healedPayload, { status: upstreamRes.status || 200 });
+    // 5. Return healed payload directly with CORS headers
+    return NextResponse.json(healedPayload, {
+      status: upstreamRes.status || 200,
+      headers: CORS_HEADERS,
+    });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ error: err.message }, { status: 500, headers: CORS_HEADERS });
   }
 }
