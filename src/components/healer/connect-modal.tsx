@@ -310,7 +310,7 @@ export function ConnectModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto border-border bg-card text-foreground sm:max-w-2xl p-6 shadow-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto border-border bg-card text-foreground w-[95vw] sm:max-w-3xl md:max-w-3xl p-7 shadow-2xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base font-semibold text-foreground">
             <Zap className="h-4 w-4 text-primary" />
@@ -357,7 +357,7 @@ export function ConnectModal({
               <p className="mb-1.5 text-xs font-medium text-foreground">
                 1-Click App Templates (Instant Fill)
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 {APP_PRESETS.map((preset) => (
                   <button
                     key={preset.id}
